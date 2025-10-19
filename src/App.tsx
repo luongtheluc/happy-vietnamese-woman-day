@@ -1,35 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import FloatingFlowers from "./components/FloatingFlower";
+import Confetti from "./pages/Confetti";
+import GiftAnimation from "./components/GiftAnimation";
+import VietnameseWomensDayCard from "./components/VietnameseWomensDayCard";
 
-function App() {
-  const [count, setCount] = useState(0)
+
+const App = () => {
+  const [showGift, setShowGift] = useState(true);
+  const [showCard, setShowCard] = useState(false);
+  const [burst, setBurst] = useState(0);
+
+  const handleGiftOpen = () => {
+    setTimeout(() => setShowGift(false), 1000);
+    setTimeout(() => setShowCard(true), 2000);
+    setBurst((b) => b + 1);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-white to-blue-100 overflow-hidden relative">
+      {showGift && <GiftAnimation onOpen={handleGiftOpen} />}
+      {showCard && (
+        <>
+          <FloatingFlowers />
+          <AnimatePresence>{burst > 0 && <Confetti burstKey={burst} />}</AnimatePresence>
+          <div className="min-h-screen flex items-center justify-center bg-pink-50">
+            {/* motion.div ở trên */}
+            <VietnameseWomensDayCard/>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
